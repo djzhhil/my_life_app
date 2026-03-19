@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="store.scserver.my_life_app.mapper.UserMapper">
+
+	<select id="selectById" resultType="store.scserver.my_life_app.entity.User">
+		select * from user where id = #{id}
+	</select>
+
+	<update id="update">
+		update user
+		set level = #{level},
+		    exp = #{exp},
+		    coin = #{coin}
+		where id = #{id}
+	</update>
+
+</mapper>
