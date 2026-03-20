@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="store.scserver.my_life_app.mapper.UserMapper">
-
-	<select id="selectById" resultType="store.scserver.my_life_app.entity.User">
-		select * from user where id = #{id}
-	</select>
-
-	<update id="update">
-		update user
-		set level = #{level},
-		    exp = #{exp},
-		    coin = #{coin}
-		where id = #{id}
-	</update>
-
+    <select id="selectById" resultType="store.scserver.my_life_app.entity.User">
+        select * from user where id = #{id}
+    </select>
+    <select id="selectByUsername" resultType="store.scserver.my_life_app.entity.User">
+        select * from user where username = #{username}
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into user (username, password, level, exp, coin, created_at, updated_at)
+        values (#{username}, #{password}, #{level}, #{exp}, #{coin}, #{createdAt}, #{updatedAt})
+    </insert>
+    <update id="update">
+        update user set level = #{level}, exp = #{exp}, coin = #{coin}, updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        delete from user where id = #{id}
+    </delete>
 </mapper>

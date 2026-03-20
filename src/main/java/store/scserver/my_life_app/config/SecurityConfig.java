@@ -8,10 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Spring Security 配置
- * 禁用默认的认证机制，允许所有请求通过（用于开发阶段）
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

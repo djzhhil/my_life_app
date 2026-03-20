@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="store.scserver.my_life_app.mapper.TaskMapper">
-
-	<select id="selectByUserId" resultType="store.scserver.my_life_app.entity.Task">
-		select * from task where user_id = #{userId}
-	</select>
-
-	<select id="selectById" resultType="store.scserver.my_life_app.entity.Task">
-		select * from task where id = #{id}
-	</select>
-
-	<insert id="insert">
-		insert into task (user_id, title, exp_reward, coin_reward, status)
-		values (#{userId}, #{title}, #{expReward}, #{coinReward}, 'pending')
-	</insert>
-
-	<update id="update">
-		update task
-		set status = #{status}
-		where id = #{id}
-	</update>
-
+    <select id="selectByUserId" resultType="store.scserver.my_life_app.entity.Task">
+        select * from task where user_id = #{userId}
+    </select>
+    <select id="selectById" resultType="store.scserver.my_life_app.entity.Task">
+        select * from task where id = #{id}
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into task (user_id, title, description, exp_reward, coin_reward, status, created_at, updated_at)
+        values (#{userId}, #{title}, #{description}, #{expReward}, #{coinReward}, #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+    <update id="update">
+        update task set status = #{status}, completed_at = #{completedAt}, updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        delete from task where id = #{id}
+    </delete>
 </mapper>

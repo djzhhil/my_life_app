@@ -38,7 +38,12 @@ public class TaskController {
         task.setUserId(1L); // 暂时保留硬编码，后续优化
         task.setStatus("pending");
         taskService.createTask(task);
-        return Result.success("创建成功", task);
+        
+        Result<Task> result = new Result<>();
+        result.setCode(200);
+        result.setMessage("创建成功");
+        result.setData(task);
+        return result;
     }
 
     /**
