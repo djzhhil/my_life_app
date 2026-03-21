@@ -2,11 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "MyLifeApp API",
-    "description": "个人成长养成游戏 API 文档\n\n## 功能说明\n- **JWT 认证**：基于 Bearer Token 的用户认证\n- **任务管理**：创建、完成、删除任务，支持分类、优先级、截止日期\n- **记账功能**：记录收入/支出，支持分类管理\n- **心愿单**：设定心愿目标、存钱进度跟踪、购买打卡\n\n## 认证说明\n除了 `/api/user/register` 和 `/api/user/login` 外，所有接口都需要在 Header 中携带 JWT Token：\n```\nAuthorization: Bearer {your_jwt_token}\n```\n\nJWT Token 从登录接口的 `data.token` 字段获取。",
-    "version": "2.0.0",
-    "contact": {
-      "name": "MyLifeApp Team"
-    }
+    "description": "个人成长养成游戏 API",
+    "version": "2.0.0"
   },
   "servers": [
     {
@@ -20,7 +17,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "JWT Token 认证。从 `/api/user/login` 接口获取 Token，然后在 Header 中添加：`Authorization: Bearer {token}`"
+        "description": "JWT 认证，从 login 接口获取 token"
       }
     },
     "schemas": {
@@ -29,14 +26,78 @@
         "properties": {
           "code": {
             "type": "integer",
-            "description": "响应状态码，200 表示成功"
+            "description": "状态码，200表示成功"
           },
           "message": {
             "type": "string",
-            "description": "响应消息"
+            "description": "消息"
           },
           "data": {
-            "description": "响应数据"
+            "description": "数据"
+          }
+        }
+      },
+      "Result_TokenVO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "登录成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TokenVO"
+          }
+        }
+      },
+      "Result_UserVO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "注册成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserVO"
+          }
+        }
+      },
+      "Result_Task": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "创建成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Task"
+          }
+        }
+      },
+      "Result_Void": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "操作成功"
+          },
+          "data": {
+            "type": "object"
           }
         }
       },
@@ -57,6 +118,10 @@
             "description": "密码",
             "maxLength": 100
           }
+        },
+        "example": {
+          "username": "testuser",
+          "password": "123456"
         }
       },
       "UserRegisterDTO": {
@@ -76,6 +141,10 @@
             "description": "密码",
             "maxLength": 100
           }
+        },
+        "example": {
+          "username": "testuser",
+          "password": "123456"
         }
       },
       "TokenVO": {
@@ -83,7 +152,35 @@
         "properties": {
           "token": {
             "type": "string",
-            "description": "JWT Token，用于后续接口认证"
+            "description": "JWT Token"
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        }
+      },
+      "UserVO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "用户ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "level": {
+            "type": "integer",
+            "description": "等级"
+          },
+          "exp": {
+            "type": "integer",
+            "description": "经验值"
+          },
+          "coin": {
+            "type": "integer",
+            "description": "金币"
           }
         }
       },
@@ -141,18 +238,11 @@
           },
           "category": {
             "type": "string",
-            "description": "任务分类",
-            "enum": [
-              "general",
-              "study",
-              "work",
-              "life",
-              "health"
-            ]
+            "description": "任务分类"
           },
           "priority": {
             "type": "integer",
-            "description": "优先级 (1:低, 2:中, 3:高)"
+            "description": "优先级"
           },
           "dueDate": {
             "type": "string",
@@ -161,12 +251,7 @@
           },
           "status": {
             "type": "string",
-            "description": "任务状态",
-            "enum": [
-              "pending",
-              "in_progress",
-              "done"
-            ]
+            "description": "任务状态"
           },
           "createdAt": {
             "type": "string",
@@ -195,39 +280,34 @@
           "expReward": {
             "type": "integer",
             "description": "经验奖励",
-            "minimum": 1,
-            "maximum": 10000
+            "minimum": 1
           },
           "coinReward": {
             "type": "integer",
             "description": "金币奖励",
-            "minimum": 1,
-            "maximum": 10000
+            "minimum": 1
           },
           "category": {
             "type": "string",
-            "description": "任务分类",
-            "enum": [
-              "general",
-              "study",
-              "work",
-              "life",
-              "health"
-            ],
-            "default": "general"
+            "description": "任务分类"
           },
           "priority": {
             "type": "integer",
-            "description": "优先级",
-            "minimum": 1,
-            "maximum": 3,
-            "default": 2
+            "description": "优先级"
           },
           "dueDate": {
             "type": "string",
             "format": "date-time",
             "description": "截止日期"
           }
+        },
+        "example": {
+          "title": "完成 LeetCode",
+          "description": "每天刷 2 道题",
+          "expReward": 20,
+          "coinReward": 10,
+          "category": "study",
+          "priority": 3
         }
       },
       "TaskUpdateDTO": {
@@ -242,19 +322,10 @@
             "maxLength": 500
           },
           "category": {
-            "type": "string",
-            "enum": [
-              "general",
-              "study",
-              "work",
-              "life",
-              "health"
-            ]
+            "type": "string"
           },
           "priority": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 3
+            "type": "integer"
           },
           "dueDate": {
             "type": "string",
@@ -266,28 +337,20 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "分类ID"
+            "type": "integer"
           },
           "name": {
-            "type": "string",
-            "description": "分类名称"
+            "type": "string"
           },
           "type": {
             "type": "integer",
-            "description": "分类类型 (1:收入, 2:支出)"
+            "description": "1:收入, 2:支出"
           },
           "icon": {
-            "type": "string",
-            "description": "图标名称"
+            "type": "string"
           },
           "color": {
-            "type": "string",
-            "description": "颜色"
-          },
-          "sortOrder": {
-            "type": "integer",
-            "description": "排序"
+            "type": "string"
           }
         }
       },
@@ -295,34 +358,28 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "交易ID"
+            "type": "integer"
           },
           "type": {
             "type": "integer",
-            "description": "类型 (1:收入, 2:支出)"
+            "description": "1:收入, 2:支出"
           },
           "amount": {
             "type": "number",
-            "format": "double",
-            "description": "金额"
+            "format": "double"
           },
           "note": {
-            "type": "string",
-            "description": "备注"
+            "type": "string"
           },
           "transactionDate": {
             "type": "string",
-            "format": "date",
-            "description": "交易日期"
+            "format": "date"
           },
           "categoryId": {
-            "type": "integer",
-            "description": "分类ID"
+            "type": "integer"
           },
           "categoryName": {
-            "type": "string",
-            "description": "分类名称"
+            "type": "string"
           }
         }
       },
@@ -337,76 +394,67 @@
         "properties": {
           "type": {
             "type": "integer",
-            "description": "类型 (1:收入, 2:支出)"
+            "description": "1:收入, 2:支出"
           },
           "amount": {
             "type": "number",
-            "format": "double",
-            "description": "金额",
-            "minimum": 0.01
+            "format": "double"
           },
           "categoryId": {
-            "type": "integer",
-            "description": "分类ID"
+            "type": "integer"
           },
           "note": {
-            "type": "string",
-            "description": "备注",
-            "maxLength": 200
+            "type": "string"
           },
           "transactionDate": {
             "type": "string",
-            "format": "date",
-            "description": "交易日期"
+            "format": "date"
           }
+        },
+        "example": {
+          "type": 2,
+          "amount": 12.5,
+          "categoryId": 1,
+          "note": "午餐",
+          "transactionDate": "2026-03-21"
         }
       },
       "WishlistVO": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "心愿ID"
+            "type": "integer"
           },
           "title": {
-            "type": "string",
-            "description": "心愿标题"
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "description": "心愿描述"
+            "type": "string"
           },
           "targetAmount": {
             "type": "number",
-            "format": "double",
-            "description": "目标金额"
+            "format": "double"
           },
           "currentAmount": {
             "type": "number",
-            "format": "double",
-            "description": "当前金额"
+            "format": "double"
           },
           "progress": {
-            "type": "integer",
-            "description": "进度百分比 (0-100)"
+            "type": "integer"
           },
           "remaining": {
             "type": "number",
-            "format": "double",
-            "description": "还需金额"
+            "format": "double"
           },
           "priority": {
-            "type": "integer",
-            "description": "优先级 (1:高, 2:中, 3:低)"
+            "type": "integer"
           },
           "status": {
-            "type": "integer",
-            "description": "状态 (0:进行中, 1:已实现, 2:已放弃)"
+            "type": "integer"
           },
           "targetDate": {
             "type": "string",
-            "format": "date",
-            "description": "目标日期"
+            "format": "date"
           }
         }
       },
@@ -419,32 +467,30 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "心愿标题",
             "maxLength": 100
           },
           "description": {
             "type": "string",
-            "description": "心愿描述",
             "maxLength": 500
           },
           "targetAmount": {
             "type": "number",
-            "format": "double",
-            "description": "目标金额",
-            "minimum": 0.01
+            "format": "double"
           },
           "priority": {
-            "type": "integer",
-            "description": "优先级 (1:高, 2:中, 3:低)",
-            "minimum": 1,
-            "maximum": 3,
-            "default": 2
+            "type": "integer"
           },
           "targetDate": {
             "type": "string",
-            "format": "date",
-            "description": "目标日期"
+            "format": "date"
           }
+        },
+        "example": {
+          "title": "Switch 游戏机",
+          "description": "任天堂 Switch",
+          "targetAmount": 1999.0,
+          "priority": 1,
+          "targetDate": "2026-12-31"
         }
       },
       "DepositDTO": {
@@ -455,19 +501,20 @@
         ],
         "properties": {
           "wishlistId": {
-            "type": "integer",
-            "description": "心愿ID"
+            "type": "integer"
           },
           "amount": {
             "type": "number",
-            "format": "double",
-            "description": "存入金额",
-            "minimum": 0.01
+            "format": "double"
           },
           "note": {
-            "type": "string",
-            "description": "备注"
+            "type": "string"
           }
+        },
+        "example": {
+          "wishlistId": 1,
+          "amount": 100.0,
+          "note": "本周存钱"
         }
       }
     }
@@ -485,6 +532,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UserRegisterDTO"
+              },
+              "example": {
+                "username": "testuser",
+                "password": "123456"
               }
             }
           }
@@ -495,7 +546,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_UserVO"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "注册成功",
+                  "data": {
+                    "id": 1,
+                    "username": "testuser",
+                    "level": 1,
+                    "exp": 0,
+                    "coin": 0
+                  }
                 }
               }
             }
@@ -511,21 +573,33 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "用户名和密码",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UserLoginDTO"
+              },
+              "example": {
+                "username": "testuser",
+                "password": "123456"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "登录成功",
+            "description": "登录成功，返回 JWT Token",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_TokenVO"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "登录成功",
+                  "data": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
                 }
               }
             }
@@ -613,7 +687,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Task"
                 }
               }
             }
@@ -658,7 +732,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Task"
                 }
               }
             }
@@ -693,7 +767,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Void"
                 }
               }
             }
@@ -728,7 +802,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Void"
                 }
               }
             }
@@ -833,7 +907,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Void"
                 }
               }
             }
@@ -893,7 +967,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Void"
                 }
               }
             }
@@ -928,7 +1002,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/Result_Void"
                 }
               }
             }
