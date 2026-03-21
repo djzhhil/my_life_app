@@ -61,8 +61,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setColor(dto.getColor());
         wishlist.setPriority(dto.getPriority());
         wishlist.setStatus(0); // 进行中
-        wishlist.setTargetDate(dto.getTargetDate() != null && !dto.getTargetDate().isEmpty()
-                ? LocalDate.parse(dto.getTargetDate()) : null);
+        wishlist.setTargetDate(dto.getTargetDate());
         wishlist.setCreatedAt(LocalDateTime.now());
         wishlist.setUpdatedAt(LocalDateTime.now());
 
@@ -208,8 +207,8 @@ public class WishlistServiceImpl implements WishlistService {
         if (dto.getPriority() != null) {
             wishlist.setPriority(dto.getPriority());
         }
-        if (dto.getTargetDate() != null && !dto.getTargetDate().isEmpty()) {
-            wishlist.setTargetDate(LocalDate.parse(dto.getTargetDate()));
+        if (dto.getTargetDate() != null) {
+            wishlist.setTargetDate(dto.getTargetDate());
         }
 
         wishlist.setUpdatedAt(LocalDateTime.now());
