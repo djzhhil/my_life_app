@@ -21,8 +21,9 @@ public interface CategoryMapper {
 
     /**
      * 根据类型查询分类列表
+     * @param type 1:收入, 2:支出
      */
-    List<Category> selectByType(String type);
+    List<Category> selectByType(Integer type);
 
     /**
      * 更新分类
