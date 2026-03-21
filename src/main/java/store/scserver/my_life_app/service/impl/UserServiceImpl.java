@@ -9,6 +9,7 @@ import store.scserver.my_life_app.entity.User;
 import store.scserver.my_life_app.exception.BusinessException;
 import store.scserver.my_life_app.mapper.UserMapper;
 import store.scserver.my_life_app.service.UserService;
+import store.scserver.my_life_app.util.JwtUtils;
 import store.scserver.my_life_app.vo.TokenVO;
 import store.scserver.my_life_app.vo.UserVO;
 import cn.hutool.core.bean.BeanUtil;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Override
     public User getUser(Long id) {
         return userMapper.selectById(id);
@@ -33,6 +37,13 @@ public class UserServiceImpl implements UserService {
     public void addExpAndCoin(Long userId, int exp, int coin) {
         User user = userMapper.selectById(userId);
         user.setExp(user.getExp() + exp);
+        user.setCoin(user.getCoin() + coin);
+        userMapper.update(user);
+    }
+
+    @Override
+    public void addCoin(Long userId, int coin) {
+        User user = userMapper.selectById(userId);
         user.setCoin(user.getCoin() + coin);
         userMapper.update(user);
     }
@@ -101,6 +112,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private String generateToken(User user) {
-        return UUID.randomUUID().toString();
+        return jwtUtils.generateToken(user.getId(), user.getUsername());
     }
 }

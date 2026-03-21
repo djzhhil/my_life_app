@@ -2,18 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="store.scserver.my_life_app.mapper.TaskMapper">
     <select id="selectByUserId" resultType="store.scserver.my_life_app.entity.Task">
-        select * from task where user_id = #{userId}
+        select * from task where user_id = #{userId} order by created_at desc
+    </select>
+    <select id="selectByUserIdAndCategory" resultType="store.scserver.my_life_app.entity.Task">
+        select * from task where user_id = #{userId} and category = #{category} order by priority desc, created_at desc
+    </select>
+    <select id="selectByUserIdAndPriority" resultType="store.scserver.my_life_app.entity.Task">
+        select * from task where user_id = #{userId} and priority = #{priority} order by created_at desc
     </select>
     <select id="selectById" resultType="store.scserver.my_life_app.entity.Task">
         select * from task where id = #{id}
     </select>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into task (user_id, title, description, exp_reward, coin_reward, status, created_at, updated_at)
-        values (#{userId}, #{title}, #{description}, #{expReward}, #{coinReward}, #{status}, #{createdAt}, #{updatedAt})
+        insert into task (user_id, title, description, exp_reward, coin_reward, category, due_date, priority, status, created_at, updated_at)
+        values (#{userId}, #{title}, #{description}, #{expReward}, #{coinReward}, #{category}, #{dueDate}, #{priority}, #{status}, #{createdAt}, #{updatedAt})
     </insert>
     <update id="update">
-        update task set status = #{status}, completed_at = #{completedAt}, updated_at = #{updatedAt}
-        where id = #{id}
+        update task set title = #{title}, description = #{description}, category = #{category}, due_date = #{dueDate},
+        priority = #{priority}, status = #{status}, completed_at = #{completedAt}, updated_at = #{updatedAt} where id = #{id}
     </update>
     <delete id="deleteById">
         delete from task where id = #{id}

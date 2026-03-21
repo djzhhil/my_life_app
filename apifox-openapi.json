@@ -1,0 +1,744 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MyLifeApp API",
+    "description": "游戏化任务管理系统 API 文档",
+    "version": "1.0.0",
+    "contact": {
+      "name": "MyLifeApp Team",
+      "email": "support@example.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "本地开发环境"
+    }
+  ],
+  "tags": [
+    {
+      "name": "用户管理",
+      "description": "用户注册、登录、信息查询"
+    },
+    {
+      "name": "任务管理",
+      "description": "任务创建、列表、完成"
+    }
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "用户注册",
+        "description": "创建新用户账号，密码使用 BCrypt 加密",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterDTO"
+              },
+              "examples": {
+                "正常注册": {
+                  "summary": "正常注册",
+                  "value": {
+                    "username": "testuser",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRegisterResponse"
+                },
+                "examples": {
+                  "注册成功": {
+                    "summary": "注册成功",
+                    "value": {
+                      "code": 200,
+                      "message": "注册成功",
+                      "data": {
+                        "id": 1,
+                        "username": "testuser",
+                        "level": 1,
+                        "exp": 0,
+                        "coin": 0,
+                        "createdAt": "2026-03-20 21:00:00",
+                        "updatedAt": "2026-03-20 21:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "用户名已存在": {
+                    "summary": "用户名已存在",
+                    "value": {
+                      "code": 400,
+                      "message": "用户名已存在",
+                      "data": null
+                    }
+                  },
+                  "密码长度不足": {
+                    "summary": "密码长度不足",
+                    "value": {
+                      "code": 400,
+                      "message": "密码长度必须在 6-30 个字符之间",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "用户登录",
+        "description": "用户登录验证，返回 Token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              },
+              "examples": {
+                "正常登录": {
+                  "summary": "正常登录",
+                  "value": {
+                    "username": "testuser",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "examples": {
+                  "登录成功": {
+                    "summary": "登录成功",
+                    "value": {
+                      "code": 200,
+                      "message": "登录成功",
+                      "data": {
+                        "token": "550e8400-e29b-41d4-a716-446655440000"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "用户名或密码错误": {
+                    "summary": "用户名或密码错误",
+                    "value": {
+                      "code": 400,
+                      "message": "用户名或密码错误",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "获取用户信息",
+        "description": "获取当前用户信息（暂时硬编码 userId=1）",
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "获取成功": {
+                    "summary": "获取成功",
+                    "value": {
+                      "id": 1,
+                      "username": "testuser",
+                      "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+                      "level": 1,
+                      "exp": 50,
+                      "coin": 20,
+                      "createdAt": "2026-03-20 21:00:00",
+                      "updatedAt": "2026-03-20 21:05:00"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/create": {
+      "post": {
+        "tags": ["任务管理"],
+        "summary": "创建任务",
+        "description": "创建新任务（暂时硬编码 userId=1）",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreateDTO"
+              },
+              "examples": {
+                "正常创建任务": {
+                  "summary": "正常创建任务",
+                  "value": {
+                    "title": "完成 Spring Boot 项目",
+                    "description": "完成 MyLifeApp 的业务逻辑完善",
+                    "expReward": 50,
+                    "coinReward": 20
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskCreateResponse"
+                },
+                "examples": {
+                  "创建成功": {
+                    "summary": "创建成功",
+                    "value": {
+                      "code": 200,
+                      "message": "创建成功",
+                      "data": {
+                        "id": 1,
+                        "userId": 1,
+                        "title": "完成 Spring Boot 项目",
+                        "description": "完成 MyLifeApp 的业务逻辑完善",
+                        "expReward": 50,
+                        "coinReward": 20,
+                        "status": "pending",
+                        "createdAt": "2026-03-20 21:00:00",
+                        "completedAt": null,
+                        "updatedAt": "2026-03-20 21:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "任务标题为空": {
+                    "summary": "任务标题为空",
+                    "value": {
+                      "code": 400,
+                      "message": "任务标题不能为空",
+                      "data": null
+                    }
+                  },
+                  "经验奖励为负数": {
+                    "summary": "经验奖励为负数",
+                    "value": {
+                      "code": 400,
+                      "message": "经验奖励不能小于 1",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/list": {
+      "get": {
+        "tags": ["任务管理"],
+        "summary": "列表获取任务",
+        "description": "获取当前用户的任务列表（暂时硬编码 userId=1）",
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                },
+                "examples": {
+                  "获取成功": {
+                    "summary": "获取成功",
+                    "value": [
+                      {
+                        "id": 1,
+                        "userId": 1,
+                        "title": "完成 Spring Boot 项目",
+                        "description": "完成 MyLifeApp 的业务逻辑完善",
+                        "expReward": 50,
+                        "coinReward": 20,
+                        "status": "pending",
+                        "createdAt": "2026-03-20 21:00:00",
+                        "completedAt": null,
+                        "updatedAt": "2026-03-20 21:00:00"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/complete/{id}": {
+      "post": {
+        "tags": ["任务管理"],
+        "summary": "完成任务",
+        "description": "完成任务，发放奖励并升级",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "任务 ID",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "完成成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                },
+                "examples": {
+                  "完成成功": {
+                    "summary": "完成成功",
+                    "value": {
+                      "code": 200,
+                      "message": "操作成功",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "任务已完成": {
+                    "summary": "任务已完成",
+                    "value": {
+                      "code": 400,
+                      "message": "任务已完成",
+                      "data": null
+                    }
+                  },
+                  "任务不存在": {
+                    "summary": "任务不存在",
+                    "value": {
+                      "code": 400,
+                      "message": "任务不存在",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Result": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "响应码：200=成功, 400=参数错误, 401=未授权, 404=不存在, 500=服务器错误"
+          },
+          "message": {
+            "type": "string",
+            "description": "响应消息"
+          },
+          "data": {
+            "type": "object",
+            "nullable": true,
+            "description": "响应数据"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "参数错误"
+          },
+          "data": {
+            "type": "object",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "UserRegisterDTO": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 20,
+            "description": "用户名（2-20字符）"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 30,
+            "description": "密码（6-30字符）"
+          }
+        }
+      },
+      "UserLoginDTO": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "password": {
+            "type": "string",
+            "description": "密码"
+          }
+        }
+      },
+      "TaskCreateDTO": {
+        "type": "object",
+        "required": ["title", "expReward", "coinReward"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "任务标题（1-100字符）"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "任务描述（可选，0-500字符）"
+          },
+          "expReward": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000,
+            "description": "经验奖励（1-10000）"
+          },
+          "coinReward": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000,
+            "description": "金币奖励（1-10000）"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "用户 ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "password": {
+            "type": "string",
+            "description": "密码（BCrypt 加密）"
+          },
+          "level": {
+            "type": "integer",
+            "description": "用户等级"
+          },
+          "exp": {
+            "type": "integer",
+            "description": "经验值"
+          },
+          "coin": {
+            "type": "integer",
+            "description": "金币数"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "创建时间"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "更新时间"
+          }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "任务 ID"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "用户 ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "任务标题"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "任务描述"
+          },
+          "expReward": {
+            "type": "integer",
+            "description": "经验奖励"
+          },
+          "coinReward": {
+            "type": "integer",
+            "description": "金币奖励"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "done"],
+            "description": "任务状态：pending=待完成, done=已完成"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "创建时间"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "完成时间"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "更新时间"
+          }
+        }
+      },
+      "UserVO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer"
+          },
+          "exp": {
+            "type": "integer"
+          },
+          "coin": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TokenVO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT Token"
+          }
+        }
+      },
+      "TaskVO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "expReward": {
+            "type": "integer"
+          },
+          "coinReward": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "done"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserRegisterResponse": {
+        "type": "object",
+        "required": ["code", "message", "data"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "注册成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserVO"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "required": ["code", "message", "data"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "登录成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TokenVO"
+          }
+        }
+      },
+      "TaskCreateResponse": {
+        "type": "object",
+        "required": ["code", "message", "data"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "创建成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TaskVO"
+          }
+        }
+      }
+    }
+  }
+}

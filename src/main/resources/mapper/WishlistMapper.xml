@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="store.scserver.my_life_app.mapper.WishlistMapper">
+
+    <select id="selectByUserId" resultType="store.scserver.my_life_app.entity.Wishlist">
+        select * from wishlist
+        where user_id = #{userId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        order by priority asc, created_at desc
+    </select>
+
+    <select id="selectById" resultType="store.scserver.my_life_app.entity.Wishlist">
+        select * from wishlist where id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into wishlist (user_id, title, description, target_amount, current_amount, icon, color, priority, status, target_date, created_at, updated_at)
+        values (#{userId}, #{title}, #{description}, #{targetAmount}, #{currentAmount}, #{icon}, #{color}, #{priority}, #{status}, #{targetDate}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="update">
+        update wishlist
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="targetAmount != null">target_amount = #{targetAmount},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="targetDate != null">target_date = #{targetDate},</if>
+            updated_at = #{updatedAt}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateAmount">
+        update wishlist set current_amount = #{amount}, updated_at = now()
+        <if test="status != null">, status = #{status}</if>
+        <if test="completedAt != null">, completed_at = #{completedAt}</if>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from wishlist where id = #{id}
+    </delete>
+
+    <select id="selectDepositsByWishlistId" resultType="store.scserver.my_life_app.entity.WishlistDeposit">
+        select * from wishlist_deposit where wishlist_id = #{wishlistId} order by created_at desc
+    </select>
+
+    <insert id="insertDeposit" useGeneratedKeys="true" keyProperty="id">
+        insert into wishlist_deposit (wishlist_id, user_id, amount, note, created_at)
+        values (#{wishlistId}, #{userId}, #{amount}, #{note}, #{createdAt})
+    </insert>
+
+    <select id="countByUserId" resultType="java.lang.Integer">
+        select count(*) from wishlist where user_id = #{userId}
+    </select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="store.scserver.my_life_app.mapper.CategoryMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="store.scserver.my_life_app.entity.Category">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="color" property="color" jdbcType="VARCHAR"/>
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 插入分类 -->
+    <insert id="insert" parameterType="store.scserver.my_life_app.entity.Category" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO category
+        (name, type, icon, color, sort_order, created_at)
+        VALUES (#{name}, #{type}, #{icon}, #{color}, #{sortOrder}, NOW())
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM category WHERE id = #{id}
+    </select>
+
+    <!-- 根据类型查询 -->
+    <select id="selectByType" resultMap="BaseResultMap">
+        SELECT * FROM category
+        WHERE type = #{type}
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <!-- 更新分类 -->
+    <update id="update" parameterType="store.scserver.my_life_app.entity.Category">
+        UPDATE category
+        SET name = #{name},
+            type = #{type},
+            icon = #{icon},
+            color = #{color},
+            sort_order = #{sortOrder}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除分类 -->
+    <delete id="deleteById">
+        DELETE FROM category WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,5 +1,6 @@
 package store.scserver.my_life_app.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,11 +9,12 @@ import store.scserver.my_life_app.dto.UserLoginDTO;
 import store.scserver.my_life_app.dto.UserRegisterDTO;
 import store.scserver.my_life_app.entity.User;
 import store.scserver.my_life_app.service.UserService;
+import store.scserver.my_life_app.util.UserContext;
 import store.scserver.my_life_app.vo.TokenVO;
 import store.scserver.my_life_app.vo.UserVO;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -37,10 +39,14 @@ public class UserController {
     }
 
     /**
-     * 获取用户信息（暂时保留硬编码 userId=1，后续优化）
+     * 获取用户信息
      */
     @GetMapping("/info")
-    public User getUser() {
-        return userService.getUser(1L);
+    public User getUser(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId != null) {
+            UserContext.setCurrentUserId(userId);
+        }
+        return userService.getUser(userId);
     }
 }
