@@ -29,9 +29,10 @@ public interface TransactionMapper {
 
     /**
      * 根据用户ID和类型查询交易列表
+     * @param type 1:收入, 2:支出
      */
     List<Transaction> selectByUserIdAndType(@Param("userId") Long userId,
-                                             @Param("type") String type,
+                                             @Param("type") Integer type,
                                              @Param("startDate") LocalDate startDate,
                                              @Param("endDate") LocalDate endDate);
 

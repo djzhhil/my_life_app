@@ -1,5 +1,7 @@
 package store.scserver.my_life_app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ public class TransactionController {
     /**
      * 获取交易列表
      */
+    @Operation(summary = "获取交易列表", description = "获取交易记录，支持按日期范围筛选", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/list")
     public List<TransactionVO> list(
             @RequestParam(required = false) LocalDate startDate,
@@ -38,6 +41,7 @@ public class TransactionController {
     /**
      * 记一笔
      */
+    @Operation(summary = "记一笔", description = "添加新的交易记录", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping("/add")
     public Result<TransactionVO> add(@Valid @RequestBody TransactionCreateDTO dto, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
@@ -51,6 +55,7 @@ public class TransactionController {
     /**
      * 更新交易记录
      */
+    @Operation(summary = "更新交易记录", description = "更新交易记录信息", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/update/{id}")
     public Result<TransactionVO> update(@PathVariable Long id, @RequestBody TransactionCreateDTO dto, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
@@ -64,6 +69,7 @@ public class TransactionController {
     /**
      * 删除交易记录
      */
+    @Operation(summary = "删除交易记录", description = "删除指定的交易记录", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/delete/{id}")
     public Result<Void> delete(@PathVariable Long id, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
@@ -77,6 +83,7 @@ public class TransactionController {
     /**
      * 获取统计分析数据
      */
+    @Operation(summary = "获取统计分析数据", description = "获取交易统计数据（收支、笔数、分类统计、日期统计）", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/statistics")
     public Result<TransactionStatisticsVO> getStatistics(
             @RequestParam(required = false) LocalDate startDate,

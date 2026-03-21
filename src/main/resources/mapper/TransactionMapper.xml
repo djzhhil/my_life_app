@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="store.scserver.my_life_app.entity.Transaction">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
-        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="category_id" property="categoryId" jdbcType="BIGINT"/>
         <result column="category_name" property="categoryName" jdbcType="VARCHAR"/>
@@ -20,8 +20,8 @@
     <!-- 插入交易记录 -->
     <insert id="insert" parameterType="store.scserver.my_life_app.entity.Transaction" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO transaction
-        (user_id, type, amount, category_id, category_name, description, account, date, created_at)
-        VALUES (#{userId}, #{type}, #{amount}, #{categoryId}, #{categoryName}, #{description}, #{account}, #{date}, NOW())
+        (user_id, type, amount, category_id, description, account, date, created_at)
+        VALUES (#{userId}, #{type}, #{amount}, #{categoryId}, #{description}, #{account}, #{date}, NOW())
     </insert>
 
     <!-- 根据ID查询 -->
@@ -74,7 +74,6 @@
         SET type = #{type},
             amount = #{amount},
             category_id = #{categoryId},
-            category_name = #{categoryName},
             description = #{description},
             account = #{account},
             date = #{date}
@@ -89,7 +88,7 @@
     <!-- 统计总收入 -->
     <select id="sumIncome" resultType="java.math.BigDecimal">
         SELECT COALESCE(SUM(amount), 0) FROM transaction
-        WHERE user_id = #{userId} AND type = 'income'
+        WHERE user_id = #{userId} AND type = 1
         <if test="startDate != null">
             AND date >= #{startDate}
         </if>
@@ -101,7 +100,7 @@
     <!-- 统计总支出 -->
     <select id="sumExpense" resultType="java.math.BigDecimal">
         SELECT COALESCE(SUM(amount), 0) FROM transaction
-        WHERE user_id = #{userId} AND type = 'expense'
+        WHERE user_id = #{userId} AND type = 2
         <if test="startDate != null">
             AND date >= #{startDate}
         </if>
@@ -149,10 +148,10 @@
     <select id="statisticsByDate" resultType="store.scserver.my_life_app.vo.TransactionStatisticsVO$DailyStatisticVO">
         SELECT
             t.date AS date,
-            COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE 0 END), 0) AS income,
-            COALESCE(SUM(CASE WHEN t.type = 'expense' THEN t.amount ELSE 0 END), 0) AS expense,
-            COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE 0 END), 0) -
-            COALESCE(SUM(CASE WHEN t.type = 'expense' THEN t.amount ELSE 0 END), 0) AS balance
+            COALESCE(SUM(CASE WHEN t.type = 1 THEN t.amount ELSE 0 END), 0) AS income,
+            COALESCE(SUM(CASE WHEN t.type = 2 THEN t.amount ELSE 0 END), 0) AS expense,
+            COALESCE(SUM(CASE WHEN t.type = 1 THEN t.amount ELSE 0 END), 0) -
+            COALESCE(SUM(CASE WHEN t.type = 2 THEN t.amount ELSE 0 END), 0) AS balance
         FROM transaction t
         WHERE t.user_id = #{userId}
         <if test="startDate != null">

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Transaction {
     private Long id;
     private Long userId;
-    private String type;  // income/expense
+    private Integer type;  // 1:收入 2:支出
     private BigDecimal amount;
     private Long categoryId;
     private String categoryName;
