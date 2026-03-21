@@ -1,5 +1,7 @@
 package store.scserver.my_life_app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ public class UserController {
     /**
      * 用户注册
      */
+    @Operation(summary = "用户注册", description = "注册新用户，创建账号")
     @PostMapping("/register")
     public Result<UserVO> register(@Valid @RequestBody UserRegisterDTO dto) {
         UserVO userVO = userService.register(dto);
@@ -32,6 +35,7 @@ public class UserController {
     /**
      * 用户登录
      */
+    @Operation(summary = "用户登录", description = "用户登录并返回 JWT Token，用于后续接口认证")
     @PostMapping("/login")
     public Result<TokenVO> login(@Valid @RequestBody UserLoginDTO dto) {
         TokenVO tokenVO = userService.login(dto);
@@ -41,6 +45,7 @@ public class UserController {
     /**
      * 获取用户信息
      */
+    @Operation(summary = "获取用户信息", description = "获取当前登录用户的详细信息", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/info")
     public User getUser(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
