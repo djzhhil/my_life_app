@@ -8,20 +8,22 @@ import lombok.Getter;
 @Getter
 public enum TaskCategory {
     /** 通用 */
-    GENERAL("general", "通用"),
+    GENERAL(0, "通用"),
     /** 学习 */
-    STUDY("study", "学习"),
+    STUDY(1, "学习"),
     /** 工作 */
-    WORK("work", "工作"),
+    WORK(2, "工作"),
+    /** 运动 */
+    SPORT(3, "运动"),
     /** 生活 */
-    LIFE("life", "生活"),
-    /** 健康 */
-    HEALTH("health", "健康");
+    LIFE(4, "生活"),
+    /** 创意 */
+    CREATIVE(5, "创意");
 
-    private final String code;
+    private final Integer code;
     private final String name;
 
-    TaskCategory(String code, String name) {
+    TaskCategory(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -29,7 +31,7 @@ public enum TaskCategory {
     /**
      * 根据 code 获取枚举
      */
-    public static TaskCategory fromCode(String code) {
+    public static TaskCategory fromCode(Integer code) {
         if (code == null) {
             return GENERAL;
         }
@@ -44,7 +46,7 @@ public enum TaskCategory {
     /**
      * 获取分类名称
      */
-    public static String getNameByCode(String code) {
+    public static String getNameByCode(Integer code) {
         return fromCode(code).getName();
     }
 }

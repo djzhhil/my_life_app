@@ -49,11 +49,11 @@ public class TaskServiceImpl implements TaskService {
         if (task.getStatus() == null || task.getStatus().isEmpty()) {
             task.setStatus("pending");
         }
-        if (task.getCategory() == null || task.getCategory().isEmpty()) {
-            task.setCategory("general");
+        if (task.getCategory() == null) {
+            task.setCategory(0);  // 0: 通用
         }
         if (task.getPriority() == null) {
-            task.setPriority(1);
+            task.setPriority(2);  // 2: 中（原设计是1，但数据库注释是3-低、2-中、1-高）
         }
         task.setCreatedAt(LocalDateTime.now());
         task.setUpdatedAt(LocalDateTime.now());

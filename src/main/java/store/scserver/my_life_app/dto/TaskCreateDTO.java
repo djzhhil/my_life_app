@@ -55,21 +55,19 @@ public class TaskCreateDTO {
 
     /**
      * 任务分类
-     * 可选值：general/study/work/life/health
-     * 默认值：general
+     * 可选值：0-通用, 1-学习, 2-工作, 3-运动, 4-生活, 5-创意
+     * 默认值：0
      */
-    @Schema(description = "任务分类", example = "study", 
-            allowableValues = {"general", "study", "work", "life", "health"})
-    private String category;
+    @Schema(description = "任务分类", example = "1",
+            allowableValues = {"0", "1", "2", "3", "4", "5"})
+    private Integer category;
 
     /**
      * 优先级
-     * 可选值：1-低、2-中、3-高
-     * 默认值：1
+     * 可选值：1-高、2-中、3-低
+     * 默认值：2
      */
-    @Min(value = 1, message = "优先级必须在 1-3 之间")
-    @Max(value = 3, message = "优先级必须在 1-3 之间")
-    @Schema(description = "优先级（1:低, 2:中, 3:高）", example = "3", minimum = "1", maximum = "3")
+    @Schema(description = "优先级（1:高, 2:中, 3:低）", example = "3", minimum = "1", maximum = "3")
     private Integer priority;
 
     /**

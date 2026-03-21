@@ -15,7 +15,7 @@ public class Task {
     private String description;
     private Integer expReward;
     private Integer coinReward;
-    private String category;
+    private Integer category;
     private Integer priority;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDate dueDate;

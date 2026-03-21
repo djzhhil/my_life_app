@@ -8,7 +8,7 @@ import java.util.List;
 public interface TaskService {
     List<Task> listTask(Long userId);
 
-    List<Task> listByCategory(Long userId, String category);
+    List<Task> listByCategory(Long userId, Integer category);
 
     List<Task> listByPriority(Long userId, Integer priority);
 

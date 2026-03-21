@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface TaskMapper {
     List<Task> selectByUserId(Long userId);
-    List<Task> selectByUserIdAndCategory(Long userId, String category);
+    List<Task> selectByUserIdAndCategory(Long userId, Integer category);
     List<Task> selectByUserIdAndPriority(Long userId, Integer priority);
     Task selectById(Long id);
     void insert(Task task);
