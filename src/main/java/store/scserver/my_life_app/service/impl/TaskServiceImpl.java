@@ -35,7 +35,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> listByCategory(Long userId, String category) {
+    public List<Task> listByCategory(Long userId, Integer category) {
         return taskMapper.selectByUserIdAndCategory(userId, category);
     }
 
