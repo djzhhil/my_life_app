@@ -18,7 +18,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> listByType(Integer type) {
-        return categoryMapper.selectByType(type);
+        Long userId = UserContext.getCurrentUserId();
+        return categoryMapper.selectByUserIdAndType(userId, type);
     }
 
     @Override

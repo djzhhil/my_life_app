@@ -20,10 +20,11 @@ public interface CategoryMapper {
     Category selectById(Long id);
 
     /**
-     * 根据类型查询分类列表
+     * 根据用户ID和类型查询分类列表
+     * @param userId 用户ID
      * @param type 1:收入, 2:支出
      */
-    List<Category> selectByType(Integer type);
+    List<Category> selectByUserIdAndType(@Param("userId") Long userId, @Param("type") Integer type);
 
     /**
      * 更新分类

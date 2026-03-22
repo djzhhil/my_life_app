@@ -26,10 +26,11 @@
         SELECT * FROM category WHERE id = #{id}
     </select>
 
-    <!-- 根据类型查询 -->
+    <!-- 根据类型查询（修复：添加 user_id 过滤） -->
     <select id="selectByType" resultMap="BaseResultMap">
         SELECT * FROM category
-        WHERE type = #{type}
+        WHERE user_id = #{userId}
+        AND type = #{type}
         ORDER BY sort_order ASC, id ASC
     </select>
 
