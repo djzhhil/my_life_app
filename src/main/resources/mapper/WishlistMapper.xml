@@ -29,6 +29,7 @@
             <if test="icon != null">icon = #{icon},</if>
             <if test="color != null">color = #{color},</if>
             <if test="priority != null">priority = #{priority},</if>
+            <if test="status != null">status = #{status},</if>
             <if test="targetDate != null">target_date = #{targetDate},</if>
             updated_at = #{updatedAt}
         </set>
