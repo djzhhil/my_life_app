@@ -37,6 +37,7 @@ public class TransactionVO {
     private String account;
     
     @Schema(description = "交易日期", example = "2026-03-21")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     
     @Schema(description = "创建时间")
