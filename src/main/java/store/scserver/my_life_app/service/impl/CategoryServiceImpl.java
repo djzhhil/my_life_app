@@ -19,6 +19,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> listByType(Integer type) {
         Long userId = UserContext.getCurrentUserId();
+        
+        // 临时方案：如果没有登录用户，使用默认用户 ID
+        // TODO: 等待 JWT 完全实现后移除此逻辑
+        if (userId == null) {
+            userId = 1L;
+        }
+        
         return categoryMapper.selectByUserIdAndType(userId, type);
     }
 
