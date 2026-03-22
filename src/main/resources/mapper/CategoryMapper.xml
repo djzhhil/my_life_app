@@ -26,8 +26,8 @@
         SELECT * FROM category WHERE id = #{id}
     </select>
 
-    <!-- 根据类型查询（修复：添加 user_id 过滤） -->
-    <select id="selectByType" resultMap="BaseResultMap">
+    <!-- 根据用户ID和类型查询（修复：添加 user_id 过滤） -->
+    <select id="selectByUserIdAndType" resultMap="BaseResultMap">
         SELECT * FROM category
         WHERE user_id = #{userId}
         AND type = #{type}
