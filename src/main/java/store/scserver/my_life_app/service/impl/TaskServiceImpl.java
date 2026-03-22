@@ -46,8 +46,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void createTask(Task task) {
-        if (task.getStatus() == null || task.getStatus().isEmpty()) {
-            task.setStatus("pending");
+        if (task.getStatus() == null) {
+            task.setStatus(0);  // 0: pending (待完成)
         }
         if (task.getCategory() == null) {
             task.setCategory(0);  // 0: 通用
@@ -118,11 +118,11 @@ public class TaskServiceImpl implements TaskService {
             throw new BusinessException(403, "无权完成此任务");
         }
         // 3. 检查任务状态
-        if ("done".equals(task.getStatus())) {
+        if (task.getStatus() == 1) {  // 1: done (已完成)
             throw new BusinessException(400, "任务已完成");
         }
         // 4. 更新任务状态和完成时间
-        task.setStatus("done");
+        task.setStatus(1);  // 1: done (已完成)
         task.setCompletedAt(LocalDateTime.now());
         task.setUpdatedAt(LocalDateTime.now());
         taskMapper.update(task);

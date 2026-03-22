@@ -68,7 +68,7 @@ public class TaskController {
         task.setPriority(dto.getPriority() != null ? dto.getPriority() : 2);  // 2: 中
         task.setDueDate(dto.getDueDate());
         task.setUserId(userId);
-        task.setStatus("pending");
+        task.setStatus(0);  // 0: pending (待完成)
 
         taskService.createTask(task);
 
