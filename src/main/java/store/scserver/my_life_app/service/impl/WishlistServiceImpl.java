@@ -133,12 +133,12 @@ public class WishlistServiceImpl implements WishlistService {
 
         // 获取用户金币余额
         User user = userService.getUser(userId);
-        if (user.getCoin() < dto.getAmount().intValue()) {
+        if (user.getCoin().compareTo(dto.getAmount()) < 0) {
             throw new BusinessException(400, "金币不足");
         }
 
         // 扣除用户金币
-        userService.addCoin(userId, -dto.getAmount().intValue());
+        userService.addCoin(userId, dto.getAmount().negate());
         log.info("用户金币已扣除，userId: {}, 扣除金额: {}", userId, dto.getAmount());
 
         // 创建存钱记录
@@ -283,7 +283,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         // 将已存金额退回给用户
         if (wishlist.getCurrentAmount() != null && wishlist.getCurrentAmount().compareTo(BigDecimal.ZERO) > 0) {
-            userService.addCoin(userId, wishlist.getCurrentAmount().intValue());
+            userService.addCoin(userId, wishlist.getCurrentAmount());
             log.info("退回金币，userId: {}, 退回金额: {}", userId, wishlist.getCurrentAmount());
         }
 

@@ -13,6 +13,7 @@ import store.scserver.my_life_app.util.JwtUtils;
 import store.scserver.my_life_app.vo.TokenVO;
 import store.scserver.my_life_app.vo.UserVO;
 import cn.hutool.core.bean.BeanUtil;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -37,14 +38,14 @@ public class UserServiceImpl implements UserService {
     public void addExpAndCoin(Long userId, int exp, int coin) {
         User user = userMapper.selectById(userId);
         user.setExp(user.getExp() + exp);
-        user.setCoin(user.getCoin() + coin);
+        user.setCoin(user.getCoin().add(BigDecimal.valueOf(coin)));
         userMapper.update(user);
     }
 
     @Override
-    public void addCoin(Long userId, int coin) {
+    public void addCoin(Long userId, BigDecimal coin) {
         User user = userMapper.selectById(userId);
-        user.setCoin(user.getCoin() + coin);
+        user.setCoin(user.getCoin().add(coin));
         userMapper.update(user);
     }
 
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(hashPassword(dto.getPassword()));
         user.setLevel(1);
         user.setExp(0);
-        user.setCoin(0);
+        user.setCoin(BigDecimal.ZERO);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
