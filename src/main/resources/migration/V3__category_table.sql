@@ -15,14 +15,18 @@ CREATE TABLE `category` (
 
 -- 插入默认分类（支出）
 INSERT INTO `category` (`user_id`, `name`, `type`, `icon`, `color`, `sort_order`) VALUES
-(1, '餐饮', 2, 'food', '#ff6b6b', 1),
-(1, '交通', 2, 'transport', '#4ecdc4', 2),
-(1, '购物', 2, 'shopping', '#ffe66d', 3),
-(1, '娱乐', 2, 'entertainment', '#95e1d3', 4),
-(1, '其他', 2, 'other', '#aa96da', 6);
+(1, '餐饮', 2, '🍜', '#ff6b6b', 1),
+(1, '交通', 2, '🚗', '#4ecdc4', 2),
+(1, '购物', 2, '🛍️', '#ffe66d', 3),
+(1, '娱乐', 2, '🎮', '#95e1d3', 4),
+(1, '医疗', 2, '💊', '#ffd43b', 5),
+(1, '教育', 2, '📚', '#74c0fc', 6),
+(1, '生活', 2, '🏠', '#ffa94d', 7),
+(1, '其他', 2, '📦', '#aa96da', 8);
 
 -- 插入默认分类（收入）
 INSERT INTO `category` (`user_id`, `name`, `type`, `icon`, `color`, `sort_order`) VALUES
-(1, '工资', 1, 'salary', '#52c41a', 1),
-(1, '奖金', 1, 'bonus', '#73d13d', 2),
-(1, '其他', 1, 'other', '#b7eb8f', 4);
+(1, '工资', 1, '💰', '#52c41a', 1),
+(1, '奖金', 1, '🎁', '#73d13d', 2),
+(1, '投资', 1, '📈', '#52c41a', 3),
+(1, '其他', 1, '📦', '#b7eb8f', 4);
